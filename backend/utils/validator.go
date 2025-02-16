@@ -14,7 +14,6 @@ func Validate(err error, validationMessages map[string]string, c *gin.Context) {
 		if errors.As(err, &ve) {
 			out := make([]ApiError, len(ve))
 			for i, fe := range ve {
-				// Lookup error message or use default
 				message := validationMessages[fe.Tag()]
 				if message == "" {
 					message = "Invalid value!"

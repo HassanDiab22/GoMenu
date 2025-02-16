@@ -33,7 +33,6 @@ func GetAllCategories(c *gin.Context) {
 func CreateCategory(c *gin.Context) {
 	var body dtos.CreateCategoryDTO
 
-	// ✅ Use ShouldBindJSON to validate and return errors
 	if err := c.ShouldBindJSON(&body); err != nil {
 		utils.Validate(err, validations.CategoryCustomValidationMessages, c)
 		return
