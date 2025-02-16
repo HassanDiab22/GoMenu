@@ -34,9 +34,18 @@ func CreatMenu(c *gin.Context) {
 
 func GetAllMenus(c *gin.Context) {
 	var menus []models.Menu
-	initializers.DB.Find(&menus)
 
-	c.JSON(200, gin.H{
-		"menus": menus,
+	total, err := utils.Paginate(initializers.DB, &menus, c.Query("page"), c.Query("page_size"))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch menus"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"total":     total,
+		"page":      c.Query("page"),
+		"page_size": c.Query("page_size"),
+		"menus":     menus,
 	})
 }
