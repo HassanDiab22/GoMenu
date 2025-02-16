@@ -4,6 +4,7 @@ import (
 	"gomenu/controllers"
 	"gomenu/initializers"
 	"gomenu/middleware"
+	"gomenu/routes"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,10 +24,8 @@ func main() {
 	authRoutes.Use(middleware.AuthMiddleware())
 
 	{
-		authRoutes.POST("/category", controllers.CreateCategory)
-		authRoutes.GET("/category", controllers.GetAllCategories)
-		authRoutes.POST("/menu", controllers.CreatMenu)
-		authRoutes.GET("/menu", controllers.GetAllMenus)
+		routes.CategoryRoutes(authRoutes) // Load category routes
+		routes.MenuRoutes(authRoutes)
 	}
 
 	r.GET("/ping", func(c *gin.Context) {
