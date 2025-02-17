@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"gomenu/controllers"
 	"gomenu/initializers"
 	"gomenu/middleware"
@@ -16,6 +18,9 @@ func init() {
 
 func main() {
 	r := gin.Default()
+	r.Static("/assets", "./assets")
+
+	// generateQRCode()
 
 	r.POST("/signin", controllers.Signin)
 	r.POST("/register", controllers.Register)
@@ -24,15 +29,14 @@ func main() {
 	authRoutes.Use(middleware.AuthMiddleware())
 
 	{
-		routes.CategoryRoutes(authRoutes) // Load category routes
+		routes.CategoryRoutes(authRoutes)
 		routes.MenuRoutes(authRoutes)
 	}
 
 	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
+		c.JSON(200, gin.H{"message": "pong"})
 	})
 
+	log.Println("Server running on :8080")
 	r.Run()
 }
