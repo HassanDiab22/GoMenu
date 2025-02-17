@@ -26,7 +26,7 @@ func CreatMenu(c *gin.Context) {
 		})
 	}
 
-	utils.GenerateQRCode(menu)
+	utils.GenerateQRCode(&menu)
 
 	c.JSON(http.StatusCreated, gin.H{
 		"menu": menu,
