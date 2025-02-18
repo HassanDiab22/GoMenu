@@ -13,27 +13,33 @@ import (
 
 func GetAllCategories(c *gin.Context) {
 	var categories []models.Category
+	var categoriesDTO []dtos.CategoryDTO
 	// var categoryDTOs []dtos.CategoryDTO
 
 	initializers.DB.Find(&categories)
 
-	// for _, category := range categories {
-	// 	categoryDTOs = append(categoryDTOs, dtos.CategoryDTO{
-	// 		Name: category.Name,
-	// 		Index: category.Index,
-	// 		ID: CATE,
-	// 	})
-	// }
+	if err := utils.AutoMap(categories, &categoriesDTO); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 
 	c.JSON(200, gin.H{
-		"categories": categories,
+		"categories": categoriesDTO,
 	})
 }
 
 func CreateCategory(c *gin.Context) {
 	var body dtos.CreateCategoryDTO
 
-	if err := c.ShouldBindJSON(&body); err != nil {
+	_, exists := c.Get("validatedData")
+	if !exists {
+		c.JSON(500, gin.H{"error": "Validation middleware failed"})
+		return
+	}
+
+	if err := c.ShouldBind(&body); err != nil {
 		utils.Validate(err, validations.CategoryCustomValidationMessages, c)
 		return
 	}

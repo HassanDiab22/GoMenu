@@ -2,6 +2,8 @@ package routes
 
 import (
 	"gomenu/controllers"
+	"gomenu/dtos"
+	"gomenu/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,7 +11,7 @@ import (
 func CategoryRoutes(r *gin.RouterGroup) {
 	categoryRoutes := r.Group("/category")
 	{
-		categoryRoutes.POST("/", controllers.CreateCategory)
+		categoryRoutes.POST("/", middleware.ValidationMiddleware(dtos.CreateCategoryDTO{}), controllers.CreateCategory)
 		categoryRoutes.GET("/", controllers.GetAllCategories)
 	}
 }
