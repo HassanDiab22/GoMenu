@@ -31,6 +31,7 @@ func main() {
 	{
 		routes.CategoryRoutes(authRoutes)
 		routes.MenuRoutes(authRoutes)
+		routes.EndpointRoutes(authRoutes)
 	}
 
 	r.GET("/ping", func(c *gin.Context) {
